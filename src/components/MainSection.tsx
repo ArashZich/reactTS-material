@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 import Footer from "./Footer";
 import VisibleBookList from "../containers/VisibleBookList";
+import { BookProvider } from "../context/BookContext";
 
 interface MainSection {
   actions: any;
@@ -13,11 +14,12 @@ const reducer = (prevState: any, updatedProperty: any) => ({
 const initState = {
   books: [],
   completedBooks: 0,
+  showAuthors: true,
 };
 
 function MainSection(props: MainSection) {
   const [value, setValue] = useReducer(reducer, initState);
-  const handleSetValue = (targetName: string, e: number) => {
+  const handleSetValue = (targetName: string, e: any) => {
     setValue({ [targetName]: e });
   };
 
@@ -40,17 +42,26 @@ function MainSection(props: MainSection) {
   };
 
   return (
-    <section className="main">
-      <VisibleBookList
-        books={value.books}
-        updateBookStatus={updateBookStatus}
-      />
-      <Footer
-        completedCount={value.completedBooks}
-        activeCount={value.books.length - value.completedBooks}
-        onClearCompleted={props.actions.clearCompleted}
-      />
-    </section>
+    <BookProvider value={{ showAuthors: value.showAuthors }}>
+      <section className="main">
+        <button
+          onClick={() => handleSetValue("showAuthors", !value.showAuthors)}
+          style={{ fontSize: "14px", margin: "5px", color: "blue" }}
+        >
+          Toggle authors
+        </button>
+
+        <VisibleBookList
+          books={value.books}
+          updateBookStatus={updateBookStatus}
+        />
+        <Footer
+          completedCount={value.completedBooks}
+          activeCount={value.books.length - value.completedBooks}
+          onClearCompleted={props.actions.clearCompleted}
+        />
+      </section>
+    </BookProvider>
   );
 }
 

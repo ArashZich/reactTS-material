@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import classnames from "classnames";
+import { BookConsumer } from "../context/BookContext";
 
 interface BookItem {
   book: any;
@@ -18,7 +19,7 @@ function BookItem(props: BookItem) {
 
   useEffect(() => {
     setCompleted(book.completed);
-  }, []);
+  }, [book]);
 
   const statusChange = () => {
     const status =
@@ -28,18 +29,30 @@ function BookItem(props: BookItem) {
   };
 
   const element = (
-    <div className="view">
-      <input
-        className="toggle"
-        type="checkbox"
-        checked={bookCompleted}
-        onChange={() => statusChange()}
-      />
-      <label>{volumeInfo.title}</label>
-      <p style={{ fontSize: "12px", textAlign: "right", marginRight: "10px" }}>
-        Author: {volumeInfo.authors[0]}
-      </p>
-    </div>
+    <BookConsumer>
+      {({ showAuthors }) => (
+        <div className="view">
+          <input
+            className="toggle"
+            type="checkbox"
+            checked={bookCompleted}
+            onChange={() => statusChange()}
+          />
+          <label>{volumeInfo.title}</label>
+          {showAuthors ? (
+            <p
+              style={{
+                fontSize: "12px",
+                textAlign: "right",
+                marginRight: "10px",
+              }}
+            >
+              Author: {volumeInfo.authors[0]}
+            </p>
+          ) : null}
+        </div>
+      )}
+    </BookConsumer>
   );
 
   return (
