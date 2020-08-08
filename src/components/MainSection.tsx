@@ -4,6 +4,8 @@ import VisibleBookList from "../containers/VisibleBookList";
 import { BookProvider } from "../context/BookContext";
 
 interface MainSection {
+  completedBooks: any;
+  books: any;
   actions: any;
 }
 
@@ -41,9 +43,18 @@ function MainSection(props: MainSection) {
       : handleSetValue("completedBooks", value.completedBooks - 1);
   };
 
+  const updateBookStatusRedux = (bookId: number) => {
+    props.actions.updateBookStatus(bookId);
+  };
+
   return (
     <BookProvider value={{ showAuthors: value.showAuthors }}>
       <section className="main">
+        <Footer
+          completedCount={props.completedBooks}
+          activeCount={props.books.length - props.completedBooks}
+          onClearCompleted={props.actions.clearCompleted}
+        />
         <button
           onClick={() => handleSetValue("showAuthors", !value.showAuthors)}
           style={{ fontSize: "14px", margin: "5px", color: "blue" }}
@@ -52,13 +63,8 @@ function MainSection(props: MainSection) {
         </button>
 
         <VisibleBookList
-          books={value.books}
+          books={props.books}
           updateBookStatus={updateBookStatus}
-        />
-        <Footer
-          completedCount={value.completedBooks}
-          activeCount={value.books.length - value.completedBooks}
-          onClearCompleted={props.actions.clearCompleted}
         />
       </section>
     </BookProvider>

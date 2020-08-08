@@ -14,3 +14,7 @@ export const setVisibilityFilter = (filter: any) => ({
   type: types.SET_VISIBILITY_FILTER,
   filter,
 });
+export const updateBookStatus = (id: number) => ({
+  type: types.UPDATE_BOOK,
+  id,
+});

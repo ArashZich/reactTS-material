@@ -15,7 +15,7 @@ function BookItem(props: BookItem) {
   const { book, updateBookStatus } = props;
   const [completed, setCompleted] = useState("");
   const { volumeInfo } = book;
-  const bookCompleted = book.status === "completed";
+  const bookCompleted = book.completed;
 
   useEffect(() => {
     setCompleted(book.completed);
